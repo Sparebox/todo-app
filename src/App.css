@@ -2,10 +2,11 @@
   text-align: center;
 }
 
-.CrossedOut {
+.Todo-CrossedOut {
   text-decoration: line-through;
+  list-style-type: none;
 }
 
-li {
+.Todo {
   list-style-type: none;
 }

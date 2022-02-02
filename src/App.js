@@ -56,12 +56,15 @@ class TodoTable extends React.Component {
 
   handleSort() {
     const todos = this.state.todos.slice();
-    todos.sort((a,b) => {return a.toLowerCase().charCodeAt(0)-b.toLowerCase().charCodeAt(0)});
+    todos.sort((a,b) => {
+      return a.toLowerCase().charCodeAt(0) - b.toLowerCase().charCodeAt(0) // Sort alphabetically and ignore upper cases
+    }); 
     this.setState({todos: todos});
   }
 
-  handleDoUndo() {
-
+  handleDoUndo(e) {
+    const className = e.currentTarget.className;
+    e.currentTarget.className = className === "Todo" ? "Todo-CrossedOut" : "Todo";
   }
 
   render() {
@@ -76,7 +79,7 @@ class TodoTable extends React.Component {
         <TodoList
           todos={this.state.todos}
           onClickRemove={this.handleRemoveTodo}
-          onClickDoUndo={this.handleDoneUndone}
+          onClickDoUndo={this.handleDoUndo}
         />
         <Buttons 
           onClickRemoveAll={this.handleRemoveAll}
@@ -106,7 +109,7 @@ function TodoForm(props) {
 
 function TodoList(props) {
   const todoItems = props.todos.map((todo) =>
-    <li key={todo}>
+    <li className="Todo" key={todo} onClick={(e) => props.onClickDoUndo(e)}>
       {todo}
       <button type="button" onClick={() => props.onClickRemove(todo)}>
         X
