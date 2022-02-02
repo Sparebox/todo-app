@@ -5,53 +5,98 @@ const notePlaceholder = "Lisää uusi tehtävä...";
 
 function App() {
   return (
-    <div className="App">
-      <NoteTable />
+    <div className="Table">
+      <TodoTable />
     </div>
   );
 }
 
-class NoteTable extends React.Component {
+class TodoTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newNote: "",
-      notes: []
+      newTodo: "",
+      todos: []
     };
     this.updateText = this.updateText.bind(this);
+    this.handleAddTodo = this.handleAddTodo.bind(this);
+    this.handleRemoveTodo = this.handleRemoveTodo.bind(this);
+    this.handleRemoveAll = this.handleRemoveAll.bind(this);
+    this.handleDoUndo = this.handleDoUndo.bind(this);
+    this.handleSort = this.handleSort.bind(this);
   }
 
   updateText(e) {
-    this.setState({newNote: e.currentTarget.value});
+    this.setState({newTodo: e.currentTarget.value});
+  }
+
+  handleAddTodo() {
+    const newTodo = this.state.newTodo.trim();
+    const todos = this.state.todos.slice();
+    const index = todos.indexOf(newTodo);
+    if(newTodo.length === 0 || index != -1) // If new todo is empty or is already in the list
+      return;
+    todos.push(newTodo);
+    this.setState({
+      newTodo: "",
+      todos: todos
+    });
+  }
+
+  handleRemoveTodo(todo) {
+    const todos = this.state.todos.slice();
+    const index = todos.indexOf(todo);
+    todos.splice(index, 1);
+    this.setState({todos: todos});
+  }
+
+  handleRemoveAll() {
+    this.setState({todos: []});
+  }
+
+  handleSort() {
+    const todos = this.state.todos.slice();
+    todos.sort((a,b) => {return a.toLowerCase().charCodeAt(0)-b.toLowerCase().charCodeAt(0)});
+    this.setState({todos: todos});
+  }
+
+  handleDoUndo() {
+
   }
 
   render() {
     return (
       <div>
         <h1>Todo-lista</h1>
-        <NoteForm newNote={this.state.newNote} onTextChange={this.updateText}/>
-        <NoteList />
-        <Buttons />
+        <TodoForm
+          newTodo={this.state.newTodo}
+          onChangeText={this.updateText}
+          onClickAdd={this.handleAddTodo}
+        />
+        <TodoList
+          todos={this.state.todos}
+          onClickRemove={this.handleRemoveTodo}
+          onClickDoUndo={this.handleDoneUndone}
+        />
+        <Buttons 
+          onClickRemoveAll={this.handleRemoveAll}
+          onClickSort={this.handleSort}
+        />
       </div>
     );
   }
 }
 
-function NoteForm(props) {
-  
-  const handleAddNote = () => {
-    console.log("Clicked +");
-  }
-
+function TodoForm(props) {
   return (
     <div>
       <input 
         type="text"
         placeholder={notePlaceholder}
-        value={props.newNote}
-        onChange={props.onTextChange}
+        value={props.newTodo}
+        onChange={props.onChangeText}
       />
-      <button type="button" onClick={handleAddNote}>
+      <button type="button" onClick={props.onClickAdd}>
         +
       </button>
     </div>
@@ -59,25 +104,30 @@ function NoteForm(props) {
   
 }
 
-function NoteList(props) {
-
+function TodoList(props) {
+  const todoItems = props.todos.map((todo) =>
+    <li key={todo}>
+      {todo}
+      <button type="button" onClick={() => props.onClickRemove(todo)}>
+        X
+      </button>
+    </li>
+  );
   return (
     <ul>
-      <li>Tehtävä A<button>X</button></li>
-      <li>Tehtävä B<button>X</button></li>
+      {todoItems}
     </ul>
   );
   
 }
 
 function Buttons(props) {
-  
   return (
     <div>
-      <button>
+      <button type="button" onClick={props.onClickSort}>
         Lajittele A-Ö
       </button>
-      <button>
+      <button type="button" onClick={props.onClickRemoveAll}>
         Poista kaikki
       </button>
     </div>
