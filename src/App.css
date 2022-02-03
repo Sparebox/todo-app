@@ -1,12 +1,51 @@
-.Table {
-  text-align: center;
+html {
+  background-color: #3d729c;
 }
 
-.Todo-CrossedOut {
+.Table {
+  text-align: center;
+  width: 300px;
+  color: white;
+  background-color: #24435c;
+  margin: 20px auto;
+  padding: 5px 0 30px 0;
+  border: 5px solid black;
+  border-radius: 10px;
+}
+
+.TodoForm {
+  width: 200px;
+}
+
+.TodoList {
+  padding: 5px 10px 5px 0;
+  display: inline-block;
+  text-align: right;
+  background-color:#3d729c;
+  border-radius: 5px;
+}
+
+.TodoCrossedOut {
+  color: greenyellow;
   text-decoration: line-through;
-  list-style-type: none;
 }
 
 .Todo {
+  display: inline;
+  margin: 0 10px 0 0;
+  padding: 0 0 0 10px;
   list-style-type: none;
 }
+
+.Todo:hover {
+  color: greenyellow;
+}
+
+.TodoCrossedOut:hover {
+  color: red;
+}
+
+.Buttons {
+  margin: 0 5px;
+}
+
